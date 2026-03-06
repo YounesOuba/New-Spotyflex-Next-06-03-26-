@@ -17,7 +17,7 @@ export default async function ArticlesPage() {
     const articles = await getAllArticles();
 
     return (
-        <main className="min-h-screen pt-20" style={{ background: '#0a0a0a' }}>
+        <main className="min-h-screen" style={{ background: '#0a0a0a' }}>
             <ArticlesContent articles={articles} />
         </main>
     );

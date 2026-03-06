@@ -63,6 +63,8 @@ const BROWSE_CATEGORIES = [
 
 /* ── Helpers ────────────────────────────────────────────────────── */
 
+import { scoreArticle, normalizeText, tokenizeQuery } from '@/lib/search';
+
 function stripHtml(html = '') {
   return html
     .replace(/<script[^>]*>.*?<\/script>/gi, '')
@@ -71,18 +73,6 @@ function stripHtml(html = '') {
     .replace(/&[a-z]+;/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
-}
-
-function scoreArticle(article, query) {
-  const q = query.toLowerCase();
-  if (article.title?.toLowerCase().includes(q)) return 3;
-  if (
-    article.excerpt?.toLowerCase().includes(q) ||
-    (article.tags || []).some(t => t.toLowerCase().includes(q)) ||
-    article.category?.toLowerCase().includes(q)
-  ) return 2;
-  if (stripHtml(article.content).toLowerCase().includes(q)) return 1;
-  return 0;
 }
 
 /* ── Skeleton card ──────────────────────────────────────────────── */

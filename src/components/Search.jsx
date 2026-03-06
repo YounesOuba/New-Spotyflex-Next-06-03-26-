@@ -69,7 +69,7 @@ export default function Search() {
     // Live search — proxied through /api/search (server-side, no CORS issues)
     useEffect(() => {
         const q = query.trim();
-        if (!q || q.length < 2) {
+        if (!q || q.length < 1) {  // Changed from < 2 to < 1 for faster feedback
             setResults([]);
             return;
         }
@@ -78,16 +78,19 @@ export default function Search() {
             setIsLoading(true);
             try {
                 const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-                if (!res.ok) throw new Error('Search failed');
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({}));
+                    throw new Error(errorData.message || 'Search failed');
+                }
                 const data = await res.json();
-                setResults(data);
+                setResults(Array.isArray(data) ? data : []);
             } catch (e) {
-                console.error('Search failed:', e);
+                console.error('❌ Search error:', e.message);
                 setResults([]);
             } finally {
                 setIsLoading(false);
             }
-        }, 250);
+        }, 300);  // Slightly increased debounce
 
         return () => clearTimeout(timer);
     }, [query]);

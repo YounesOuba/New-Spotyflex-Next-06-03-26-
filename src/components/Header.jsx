@@ -131,7 +131,7 @@ const Header = () => {
           </Link>
 
           {/* ── Desktop Nav ── */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
+          <nav className="hidden md:flex items-center gap-5" aria-label="Main navigation">
             <NavLink href="/" isActive={pathname === '/'}>Home</NavLink>
 
             {mounted ? (
