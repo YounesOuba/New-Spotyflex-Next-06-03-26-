@@ -1,0 +1,80 @@
+/**
+ * ARTICLE ISOLATION - Prevents global styles from overriding article CSS
+ * Uses CSS containment and proper cascading to ensure custom article styles display
+ * This is the KEY to making article styles work as designed
+ */
+
+/* Article container with CSS containment - HIGHEST priority */
+.sf-article-capsule {
+  width: 100%;
+  contain: layout style paint;
+  isolation: isolate;
+  padding: 0;
+  margin: 0;
+  /* Do NOT reset all properties, let article CSS and fallback styles apply */
+  display: block;
+}
+
+/* Joomla article wrapper - isolated context prevents global interference */
+.joomla-article {
+  width: 100%;
+  display: block;
+  contain: layout style paint;
+  isolation: isolate;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  padding: 0;
+  margin: 0;
+  /* Do NOT force colors/fonts/backgrounds - let article CSS apply */
+}
+
+/* CRITICAL: Reset global styles that interfere with article content */
+/* Only reset what's necessary, let article CSS handle the rest */
+.sf-article-capsule *,
+.joomla-article * {
+  /* Only reset margin and padding, do not touch color, background, font, etc. */
+  margin: revert;
+  padding: revert;
+  border: revert;
+}
+
+/* Ensure images are responsive (this won't interfere with article CSS) */
+.joomla-article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Inline elements like spans, strong, em should inherit */
+.joomla-article span,
+.joomla-article strong,
+.joomla-article em,
+.joomla-article b,
+.joomla-article i {
+  margin: revert;
+  padding: revert;
+  all: revert;
+}
+
+/* Mobile responsive base styles */
+@media (max-width: 768px) {
+  .sf-article-capsule,
+  .joomla-article {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .joomla-article img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .sf-article-capsule,
+  .joomla-article {
+    width: 100%;
+  }
+}

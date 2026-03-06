@@ -1,26 +1,348 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Fitness Blog Design System - Modern & Sophisticated
+All colors MUST be HSL for consistency and theming support.
+*/
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Defer non-critical animations until after initial paint */
+@supports (animation: test) {
+  @media (prefers-reduced-motion: no-preference) {
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Animations only load after page is interactive */
+    html.ready * {
+      animation-delay: 0s;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@layer base {
+  :root {
+    /* Core Layout Colors */
+    --background: 0 0% 100%;
+    /* Clean white background */
+    --foreground: 0 0% 15%;
+    /* Darker gray text (#262626) */
+
+    /* Card & Surface Colors */
+    --card: 0 0% 98%;
+    /* Very light gray card backgrounds (#fafafa) */
+    --card-foreground: 0 0% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    /* Brand Colors - Fitness Theme */
+    --primary: 71 100% 71%;
+    /* Vibrant lime green (#cfff6a) */
+    --primary-foreground: 0 0% 15%;
+    --primary-hover: 71 100% 60%;
+    /* Slightly darker for hover */
+
+    --secondary: 88 100% 20%;
+    /* Rich deep green (#335c00) */
+    --secondary-foreground: 0 0% 100%;
+
+    /* Accent & Supporting Colors */
+    --accent: 173 80% 30%;
+    /* Deep Teal accent */
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 0 0% 96%;
+    /* Light gray for muted elements */
+    --muted-foreground: 0 0% 45%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* UI Elements */
+    --border: 0 0% 92%;
+    --input: 0 0% 96%;
+    --ring: 71 100% 71%;
+    /* Primary color for focus rings */
+
+    /* Design System Variables */
+    --radius: 0.75rem;
+    /* 12px border radius for softer feel */
+
+    /* Custom Gradients */
+    --hero-gradient: radial-gradient(circle at top right, #2a2a2a 0%, #1a1a1a 100%);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+    /* Animation Variables */
+    --transition-base: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-fast: all 0.2s ease-out;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: #CFFF6A;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Selection Style */
+  ::selection {
+    background-color: hsl(var(--primary) / 0.3);
+    color: inherit;
+  }
+}
+
+@layer components {
+
+  /* Hero Gradient Background */
+  .hero-gradient {
+    background: var(--hero-gradient);
+  }
+
+  /* Card Shadows */
+  .card-shadow {
+    box-shadow: var(--card-shadow);
+  }
+
+  .card-shadow-hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* Smooth Transitions */
+  .transition-base {
+    transition: var(--transition-base);
+  }
+
+  .transition-fast {
+    transition: var(--transition-fast);
+  }
+
+  /* Post Card Hover Effects */
+  .post-card {
+    @apply bg-card rounded-lg overflow-hidden card-shadow transition-base;
+  }
+
+  .post-card:hover {
+    @apply card-shadow-hover transform -translate-y-1;
+  }
+
+  /* Navigation Styles */
+  .nav-link {
+    @apply text-white transition-colors duration-200;
+  }
+
+  .nav-link:hover {
+    color: #cfff6a;
+  }
+
+
+  .nav-link.active {
+    @apply text-primary;
+  }
+
+  /* Button Variants */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-medium transition-fast;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-3 rounded-lg font-medium transition-fast;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90 px-4 py-2 rounded-lg font-medium transition-fast;
+  }
+
+  /* ────────────────────────────────────────
+     Refined Article Content
+  ──────────────────────────────────────── */
+  .article-content {
+    font-family: var(--font-inter), sans-serif;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.73);
+  }
+
+  .article-content h1,
+  .article-content h2,
+  .article-content h3,
+  .article-content h4,
+  .article-content h5,
+  .article-content h6 {
+    font-family: var(--font-playfair), serif;
+    color: #ffffff;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    margin-top: 3.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .article-content h2 {
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    line-height: 1.15;
+  }
+
+  .article-content h3 {
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    line-height: 1.25;
+  }
+
+  .article-content p {
+    margin-bottom: 1.8rem;
+    font-size: 1.15rem;
+    line-height: 1.95;
+  }
+
+  .article-content a {
+    color: #cfff6a;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(207, 255, 106, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .article-content a:hover {
+    border-color: #cfff6a;
+    background: rgba(207, 255, 106, 0.05);
+  }
+
+  .article-content ul,
+  .article-content ol {
+    padding-left: 1.75rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .article-content li {
+    margin-bottom: 0.75rem;
+  }
+
+  .article-content ul li::marker {
+    color: #cfff6a;
+  }
+
+  .article-content blockquote {
+    border-left: 4px solid #cfff6a;
+    padding: 1.5rem 2rem;
+    margin: 3.5rem 0;
+    background: rgba(207, 255, 106, 0.03);
+    border-radius: 0 1.5rem 1.5rem 0;
+    color: rgba(255, 255, 255, 0.85);
+    font-style: italic;
+    font-size: 1.25rem;
+  }
+
+  .article-content img {
+    border-radius: 2.5rem;
+    margin: 4.5rem 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    display: block;
+  }
+
+  .article-content hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 5rem 0;
+  }
+
+  .article-content strong {
+    color: #ffffff;
+    font-weight: 800;
+  }
+
+  .article-content code {
+    background: rgba(255, 255, 255, 0.06);
+    color: #cfff6a;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-family: inherit;
+  }
+
+  .article-content pre {
+    background: #0d0d0d;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    overflow-x: auto;
+    margin: 2.5rem 0;
+  }
+
+  .article-content pre code {
+    background: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.8);
+  }
 }
