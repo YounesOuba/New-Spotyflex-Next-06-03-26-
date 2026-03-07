@@ -8,6 +8,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllArticles } from '@/lib/api';
+import { searchArticles } from '@/lib/search';
 import NextImage from 'next/image';
 import smallLogo from '../assets/Logo/Spoty.png';
 
@@ -66,34 +67,36 @@ export default function Search() {
     const handleQuickNav = (href) => { close(); router.push(href); };
     const handleTrending = (term) => { setQuery(term); inputRef.current?.focus(); };
 
-    // Live search — proxied through /api/search (server-side, no CORS issues)
+    const [articles, setArticles] = useState([]);
+
+    // Load articles on mount
+    useEffect(() => {
+        getAllArticles().then(data => setArticles(data || []));
+    }, []);
+
+    // Live search — client-side
     useEffect(() => {
         const q = query.trim();
-        if (!q || q.length < 1) {  // Changed from < 2 to < 1 for faster feedback
+        if (!q || q.length < 1 || articles.length === 0) {
             setResults([]);
             return;
         }
 
-        const timer = setTimeout(async () => {
+        const timer = setTimeout(() => {
             setIsLoading(true);
             try {
-                const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-                if (!res.ok) {
-                    const errorData = await res.json().catch(() => ({}));
-                    throw new Error(errorData.message || 'Search failed');
-                }
-                const data = await res.json();
-                setResults(Array.isArray(data) ? data : []);
+                const searchResults = searchArticles(articles, q, 8);
+                setResults(Array.isArray(searchResults) ? searchResults : []);
             } catch (e) {
                 console.error('❌ Search error:', e.message);
                 setResults([]);
             } finally {
                 setIsLoading(false);
             }
-        }, 300);  // Slightly increased debounce
+        }, 150);  // Faster debounce for client-side search
 
         return () => clearTimeout(timer);
-    }, [query]);
+    }, [query, articles]);
 
     useEffect(() => {
         const onKey = (e) => {
