@@ -21,8 +21,10 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-4 sm:right-8 z-50 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300"
+          className="fixed z-50 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300"
           style={{
+            bottom: '2rem',
+            right: 'calc(1rem + env(safe-area-inset-right, 0px))',
             background: '#cfff6a',
             color: '#0a0a0a',
             boxShadow: '0 8px 24px rgba(207,255,106,0.3)',

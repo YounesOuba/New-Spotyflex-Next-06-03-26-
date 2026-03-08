@@ -45,6 +45,16 @@ export const metadata = {
     alternates: {
         canonical: 'https://spotyflex.com',
     },
+    icons: {
+        icon: [
+            { url: '/favicon.ico', sizes: 'any' },
+            { url: '/icon.png', type: 'image/png' },
+        ],
+        apple: [
+            { url: '/apple-icon.png', type: 'image/png' },
+        ],
+        shortcut: '/favicon.ico',
+    },
 };
 
 const inter = Inter({
@@ -67,7 +77,6 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
             <head>
-                <link rel="icon" href="/favicon.ico" sizes="any" />
                 <Script
                     id="gtm-base"
                     strategy="lazyOnload"
